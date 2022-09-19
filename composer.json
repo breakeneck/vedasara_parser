@@ -1,0 +1,11 @@
+{
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.24",
+        "johngrogg/ics-parser": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lib\\": "Lib"
+        }
+    }
+}
