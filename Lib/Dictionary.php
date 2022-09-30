@@ -9,11 +9,12 @@ class Dictionary
 
     public function useDict($filename)
     {
+        $this->dict = [];
         $lines = array_filter(explode(PHP_EOL, file_get_contents($filename)));
         foreach ($lines as $line) {
             if (trim($line)) {
                 list($from, $to) = explode(':', $line);
-                $this->dict[] = [$from => $to];
+                $this->dict[] = ['from' => $from, 'to' => $to];
             }
         }
         return $this;
@@ -34,8 +35,8 @@ class Dictionary
     public function replaceContent($content)
     {
         return  str_replace(
-            array_keys($this->dict),
-            array_values($this->dict),
+            array_column($this->dict, 'from'),
+            array_column($this->dict, 'to'),
             $content
         );
     }
@@ -43,7 +44,7 @@ class Dictionary
     public function addPhraseIfFound($content, $phraseToAdd, $needle)
     {
         if (str_contains($content, $needle)) {
-            $content .= $phraseToAdd;
+            $content .= '\n' . $phraseToAdd;
         }
         return $content;
     }
@@ -51,8 +52,8 @@ class Dictionary
     public function replace()
     {
         $this->content = str_replace(
-            array_keys($this->dict),
-            array_values($this->dict),
+            array_column($this->dict, 'from'),
+            array_column($this->dict, 'to'),
             $this->content
         );
         return $this;
