@@ -46,10 +46,10 @@ class Calendar
 
     }
 
-    public function updateEvents($callback)
+    public function updateEvents($callback, $arguments = [])
     {
         foreach ($this->events as $i => $event) {
-            $this->events[$i]->description = call_user_func($callback, $event->description);
+            $this->events[$i]->description = call_user_func_array($callback, array_merge([$event->description], $arguments));
         }
 //        $this->events[0]->description = 'Hello World';
         return $this;

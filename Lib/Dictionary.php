@@ -4,18 +4,19 @@ namespace Lib;
 
 class Dictionary
 {
-    private $dict = [];
+    public $dict = [];
     public $content;
 
-    public function __construct($filename)
+    public function useDict($filename)
     {
         $lines = array_filter(explode(PHP_EOL, file_get_contents($filename)));
         foreach ($lines as $line) {
             if (trim($line)) {
                 list($from, $to) = explode(':', $line);
-                $this->dict[] = ['from' => $from, 'to' => $to];
+                $this->dict[] = [$from => $to];
             }
         }
+        return $this;
     }
 
     public function setContent($content)
@@ -33,17 +34,25 @@ class Dictionary
     public function replaceContent($content)
     {
         return  str_replace(
-            array_column($this->dict, 'from'),
-            array_column($this->dict, 'to'),
+            array_keys($this->dict),
+            array_values($this->dict),
             $content
         );
+    }
+
+    public function addPhraseIfFound($content, $phraseToAdd, $needle)
+    {
+        if (str_contains($content, $needle)) {
+            $content .= $phraseToAdd;
+        }
+        return $content;
     }
 
     public function replace()
     {
         $this->content = str_replace(
-            array_column($this->dict, 'from'),
-            array_column($this->dict, 'to'),
+            array_keys($this->dict),
+            array_values($this->dict),
             $this->content
         );
         return $this;
