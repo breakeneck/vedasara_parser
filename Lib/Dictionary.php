@@ -4,15 +4,18 @@ namespace Lib;
 
 class Dictionary
 {
-    private $dict;
+    private $dict = [];
     public $content;
 
     public function __construct($filename)
     {
-        $this->dict = array_map(function($line) {
-            list($from, $to) = explode(':', $line);
-            return ['from' => $from, 'to' => $to];
-        }, array_filter(explode(PHP_EOL, file_get_contents($filename))));
+        $lines = array_filter(explode(PHP_EOL, file_get_contents($filename)));
+        foreach ($lines as $line) {
+            if (trim($line)) {
+                list($from, $to) = explode(':', $line);
+                $this->dict[] = ['from' => $from, 'to' => $to];
+            }
+        }
     }
 
     public function setContent($content)
@@ -25,6 +28,15 @@ class Dictionary
     {
          $this->content = str_replace("\r\n ", "", $this->content);
          return $this;
+    }
+
+    public function replaceContent($content)
+    {
+        return  str_replace(
+            array_column($this->dict, 'from'),
+            array_column($this->dict, 'to'),
+            $content
+        );
     }
 
     public function replace()

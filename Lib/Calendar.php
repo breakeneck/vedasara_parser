@@ -43,6 +43,16 @@ class Calendar
     {
         $this->events[0]->description = 'Hello World';
         return $this;
+
+    }
+
+    public function updateEvents($callback)
+    {
+        foreach ($this->events as $i => $event) {
+            $this->events[$i]->description = call_user_func($callback, $event->description);
+        }
+//        $this->events[0]->description = 'Hello World';
+        return $this;
     }
 
     public function write($filename)
