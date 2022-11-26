@@ -47,13 +47,14 @@ class XlsParser
                     $reader->changeSheet($userNakshatraName);
                 }
                 $cell = $reader->findCell($currentNakshatraName);
+                list($row, $col) = [$cell->getRow(), $cell->getColumn()];
 
                 $model = new Model();
                 $model->source = $userNakshatraName;
                 $model->target = $currentNakshatraName;
                 $model->nadi = $reader->getNextCellValue($cell);
-                $model->tara = $reader->getValue($cell->getRow(), XlsReader::TARA_COL);
-                $model->influence = $reader->getValue(XlsReader::INFLUENCE_ROW, $cell->getColumn());
+                $model->tara = $reader->getValue($row, XlsReader::TARA_COL);
+                $model->influence = intval($reader->getValue(XlsReader::INFLUENCE_ROW, $col));
 
                 $storage->add($model);
             }

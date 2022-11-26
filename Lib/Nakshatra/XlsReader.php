@@ -45,10 +45,6 @@ class XlsReader
             foreach ($cellIterator as $cell) {
                 if (strpos($cell->getValue(), $needle) !== false) {
                     return $cell;
-                        //[$cell->getRow(), $cell->getColumn()];
-                        //$cell->getCoordinate();
-        //            echo $cell->getRow() ."\n";
-//                    return $this->sheet->getCell('K' . $cell->getRow())->getValue();
                 }
             }
         }
