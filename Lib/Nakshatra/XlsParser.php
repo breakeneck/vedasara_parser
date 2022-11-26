@@ -2,7 +2,7 @@
 
 namespace Lib\Nakshatra;
 
-class Writer
+class XlsParser
 {
     const NAMES = [
         'Ашвини',
@@ -34,25 +34,26 @@ class Writer
         'Ревати',
     ];
 
-    public function process()
+    public function saveToStorage($filename = null): void
     {
-        $parser = new XlsReader();
+        $reader = new XlsReader($filename);
+
         $storage = new Storage();
         $storage->reset();
 
         foreach (self::NAMES as $userNakshatraName) {
             foreach (self::NAMES as $currentNakshatraName) {
-                if ($parser->getCurrentSheetTitle() != $userNakshatraName) {
-                    $parser->changeSheet($userNakshatraName);
+                if ($reader->getCurrentSheetTitle() != $userNakshatraName) {
+                    $reader->changeSheet($userNakshatraName);
                 }
-                $cell = $parser->findCell($currentNakshatraName);
+                $cell = $reader->findCell($currentNakshatraName);
 
                 $model = new Model();
                 $model->source = $userNakshatraName;
                 $model->target = $currentNakshatraName;
-                $model->nadi = $parser->getNextCellValue($cell);
-                $model->tara = $parser->getValue($cell->getRow(), XlsReader::TARA_COL);
-                $model->influence = $parser->getValue(XlsReader::INFLUENCE_ROW, $cell->getColumn());
+                $model->nadi = $reader->getNextCellValue($cell);
+                $model->tara = $reader->getValue($cell->getRow(), XlsReader::TARA_COL);
+                $model->influence = $reader->getValue(XlsReader::INFLUENCE_ROW, $cell->getColumn());
 
                 $storage->add($model);
             }

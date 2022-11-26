@@ -4,16 +4,17 @@ namespace Lib\Nakshatra;
 
 class Storage
 {
-    const FILENAME = 'nadi.csv';
+    const FILENAME = __DIR__ . '/../../nadi.csv';
 
     protected $raw = [];
     protected $indexed = [];
 
     public function __construct()
     {
-        $handle = fopen(self::FILENAME, 'r');
-        $this->raw = fgetcsv($handle);
-        fclose($handle);
+        if ($handle = @fopen(self::FILENAME, 'r')) {
+            $this->raw = fgetcsv($handle);
+            fclose($handle);
+        }
 
         $this->reindex();
     }
