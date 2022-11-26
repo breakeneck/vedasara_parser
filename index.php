@@ -7,7 +7,6 @@ list($script, $filename) = $argv;
 
 $dictionary = new \Lib\Dictionary();
 //$dictionary->replace($filename);
-
 //$nakshatra = new \Lib\Nakshatra(__DIR__ . '/nadi.xlsx');
 //$nakshatra->changeSheet('');
 //$nakshatra->findCell('ревати');

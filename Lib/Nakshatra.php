@@ -6,6 +6,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class Nakshatra
 {
+    const DESCRIPTION_COLUMN = 'K';
+
     /** @var \PhpOffice\PhpSpreadsheet\Spreadsheet  */
     private $spreadsheet;
     /** @var Worksheet */
@@ -30,12 +32,20 @@ class Nakshatra
             $cellIterator->setIterateOnlyExistingCells(true);
             foreach ($cellIterator as $cell) {
                 if (strpos($cell->getValue(), $needle) !== false) {
-                    return $cell->getCoordinate();
+                    return $cell;
+                        //[$cell->getRow(), $cell->getColumn()];
+                        //$cell->getCoordinate();
         //            echo $cell->getRow() ."\n";
 //                    return $this->sheet->getCell('K' . $cell->getRow())->getValue();
                 }
             }
         }
+    }
+
+    public function getValue($row, $col)
+    {
+//        return $this->sheet->getCellByColumnAndRow($col, $row)->getValue();
+        return $this->sheet->getCell($col . $row)->getValue();
     }
 
 }
