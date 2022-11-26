@@ -1,21 +1,24 @@
 <?php
 
-namespace Lib;
+namespace Lib\Nakshatra;
 
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class Nakshatra
+class XlsReader
 {
-    const DESCRIPTION_COLUMN = 'K';
+    const FILENAME = __DIR__ . '/../../nadi.xlsx';
+
+    const TARA_COL = 'K';
+    const INFLUENCE_ROW = 4;
 
     /** @var \PhpOffice\PhpSpreadsheet\Spreadsheet  */
     private $spreadsheet;
     /** @var Worksheet */
     private $sheet;
 
-    public function __construct($filename)
+    public function __construct($filename = null)
     {
-        $this->spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($filename);
+        $this->spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($filename ?? self::FILENAME);
     }
 
     public function changeSheet($name)
@@ -23,6 +26,15 @@ class Nakshatra
         $this->sheet = $this->spreadsheet->getSheetByName($name);
     }
 
+    public function getCurrentSheetTitle()
+    {
+        return $this->sheet?->getTitle();
+    }
+
+    /**
+     * @param $needle
+     * @return \PhpOffice\PhpSpreadsheet\Cell\Cell|void|null
+     */
     public function findCell($needle)
     {
         //preg_match('/Накшатра(.*)до/', $content, $matches);
@@ -48,4 +60,13 @@ class Nakshatra
         return $this->sheet->getCell($col . $row)->getValue();
     }
 
+    /**
+     * @param $cell \PhpOffice\PhpSpreadsheet\Cell\Cell
+     * @return mixed
+     */
+    public function getNextCellValue($cell)
+    {
+        $nextCol = chr(ord($cell->getColumn()) + 1);
+        return $this->sheet->getCell($nextCol . $cell->getRow())->getValue();
+    }
 }
