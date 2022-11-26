@@ -24,6 +24,7 @@ class XlsReader
     public function changeSheet($name)
     {
         $this->sheet = $this->spreadsheet->getSheetByName($name);
+        return $this->sheet;
     }
 
     public function getCurrentSheetTitle()
@@ -53,7 +54,7 @@ class XlsReader
     public function getValue($row, $col)
     {
 //        return $this->sheet->getCellByColumnAndRow($col, $row)->getValue();
-        return $this->sheet->getCell($col . $row)->getValue();
+        return $this->sheet->getCell($col . $row)->getCalculatedValue();
     }
 
     /**
@@ -63,6 +64,6 @@ class XlsReader
     public function getNextCellValue($cell)
     {
         $nextCol = chr(ord($cell->getColumn()) + 1);
-        return $this->sheet->getCell($nextCol . $cell->getRow())->getValue();
+        return $this->sheet->getCell($nextCol . $cell->getRow())->getCalculatedValue();
     }
 }

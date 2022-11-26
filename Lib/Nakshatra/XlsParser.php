@@ -44,9 +44,15 @@ class XlsParser
         foreach (self::NAMES as $userNakshatraName) {
             foreach (self::NAMES as $currentNakshatraName) {
                 if ($reader->getCurrentSheetTitle() != $userNakshatraName) {
-                    $reader->changeSheet($userNakshatraName);
+                    if (! $reader->changeSheet($userNakshatraName)) {
+                        throw new \Exception("Sheet $userNakshatraName not found");
+                    }
                 }
-                $cell = $reader->findCell($currentNakshatraName);
+                if (! $cell = $reader->findCell($currentNakshatraName)) {
+                    echo "Cell $currentNakshatraName for sheet $userNakshatraName not found";
+                    continue;
+                }
+
                 list($row, $col) = [$cell->getRow(), $cell->getColumn()];
 
                 $model = new Model();
