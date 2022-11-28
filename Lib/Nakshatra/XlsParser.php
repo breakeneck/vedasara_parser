@@ -42,12 +42,14 @@ class XlsParser
         $storage->reset();
 
         foreach (self::NAMES as $userNakshatraName) {
-            foreach (self::NAMES as $currentNakshatraName) {
-                if ($reader->getCurrentSheetTitle() != $userNakshatraName) {
-                    if (! $reader->changeSheet($userNakshatraName)) {
-                        throw new \Exception("Sheet $userNakshatraName not found");
-                    }
+            if ($reader->getCurrentSheetTitle() != $userNakshatraName) {
+                if (! $reader->changeSheet($userNakshatraName)) {
+//                        throw new \Exception("Sheet $userNakshatraName not found");
+                    echo ("Sheet $userNakshatraName not found");
+                    continue;
                 }
+            }
+            foreach (self::NAMES as $currentNakshatraName) {
                 if (! $cell = $reader->findCell($currentNakshatraName)) {
                     echo "Cell $currentNakshatraName for sheet $userNakshatraName not found";
                     continue;
