@@ -38,22 +38,20 @@ class XlsReader
      */
     public function findCell($needle)
     {
-        //preg_match('/Накшатра(.*)до/', $content, $matches);
-
         foreach ($this->sheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(true);
             foreach ($cellIterator as $cell) {
-                if (strpos($cell->getValue(), $needle) !== false) {
+                if (stripos($cell->getValue(), $needle) !== false) {
                     return $cell;
                 }
             }
         }
+        return null;
     }
 
     public function getValue($row, $col)
     {
-//        return $this->sheet->getCellByColumnAndRow($col, $row)->getValue();
         return $this->sheet->getCell($col . $row)->getCalculatedValue();
     }
 
