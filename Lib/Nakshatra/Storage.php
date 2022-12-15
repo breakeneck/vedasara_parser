@@ -31,7 +31,9 @@ class Storage
     public function save()
     {
         $handle = fopen(self::FILENAME, 'w');
-        fputcsv($handle, $this->raw);
+        foreach ($this->raw as $row) {
+            fputcsv($handle, $row);
+        }
         fclose($handle);
     }
 
@@ -42,6 +44,7 @@ class Storage
 
     public function reset()
     {
-        $this->data = [];
+        $this->raw = [];
+        $this->indexed = [];
     }
 }

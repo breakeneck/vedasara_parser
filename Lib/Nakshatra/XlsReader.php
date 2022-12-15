@@ -8,8 +8,8 @@ class XlsReader
 {
     const FILENAME = __DIR__ . '/../../nadi.xlsx';
 
-    const TARA_COL = 'K';
-    const INFLUENCE_ROW = 4;
+    const TARA_COL = 'D';
+    const BALA_ROW = 3;
 
     /** @var \PhpOffice\PhpSpreadsheet\Spreadsheet  */
     private $spreadsheet;

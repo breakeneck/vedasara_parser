@@ -4,34 +4,63 @@ namespace Lib\Nakshatra;
 
 class XlsParser
 {
+//    const NAMES = [
+//        'Ашвини',
+//        'Бхарани',
+//        'Криттика',
+//        'Рохини',
+//        'Мригашира',
+//        'Ардра',
+//        'Пунарвасу',
+//        'Пушья',
+//        'Ашлеша',
+//        'Магха',
+//        'Пурва-пхалгуни',
+//        'Уттара-пхалгуни',
+//        'Хаста',
+//        'Читра',
+//        'Свати',
+//        'Вишакха',
+//        'Анурадха',
+//        'Джйештха',
+//        'Мула',
+//        'Пурва-ашадха',
+//        'Уттара-ашадха',
+//        'Шравана',
+//        'Дхаништха',
+//        'Шатабхиша',
+//        'Пурва-бхадра',
+//        'Уттара-бхадра',
+//        'Ревати',
+//    ];
     const NAMES = [
-        'Ашвини',
-        'Бхарани',
-        'Критика',
-        'Рохини',
-        'Мригашира',
-        'Аридра',
+        'Ашвіні',
+        'Бхарані',
+        'Крітіка',
+        'Рохіні',
+        'Мрігашіра',
+        'Арідра',
         'Пунарвасу',
-        'Пушья',
+        'Пушйа',
         'Ашлеша',
         'Магха',
-        'Пурва Пхалгуни',
-        'Уттара Пхалгуни',
+        'Пурва Пхалгуні',
+        'Уттара Пхалгуні',
         'Хаста',
-        'Читра',
-        'Свати',
-        'Вишакха',
+        'Чітра',
+        'Сваті',
+        'Вішакха',
         'Анурадха',
         'Джйештха',
         'Мула',
         'Пурва Ашадха',
         'Уттара Ашадха',
         'Шравана',
-        'Дхаништха',
-        'Шатабхиша',
+        'Дханіштха',
+        'Шатабхіша',
         'Пурва Бхадра',
         'Уттара Бхадра',
-        'Ревати',
+        'Реваті',
     ];
 
     public function saveToStorage($filename = null): void
@@ -41,17 +70,17 @@ class XlsParser
         $storage = new Storage();
         $storage->reset();
 
-        foreach (self::NAMES as $userNakshatraName) {
+        foreach (self::NAMES as $n => $userNakshatraName) {
             if ($reader->getCurrentSheetTitle() != $userNakshatraName) {
                 if (! $reader->changeSheet($userNakshatraName)) {
 //                        throw new \Exception("Sheet $userNakshatraName not found");
-                    echo ("Sheet $userNakshatraName not found");
+                    echo ("SHEET $userNakshatraName not found\n");
                     continue;
                 }
             }
             foreach (self::NAMES as $currentNakshatraName) {
                 if (! $cell = $reader->findCell($currentNakshatraName)) {
-                    echo "Cell $currentNakshatraName for sheet $userNakshatraName not found";
+                    echo "Cell $currentNakshatraName for sheet $userNakshatraName not found\n";
                     continue;
                 }
 
@@ -60,9 +89,9 @@ class XlsParser
                 $model = new Model();
                 $model->source = $userNakshatraName;
                 $model->target = $currentNakshatraName;
-                $model->nadi = $reader->getNextCellValue($cell);
+//                $model->nadi = $reader->getNextCellValue($cell);
                 $model->tara = $reader->getValue($row, XlsReader::TARA_COL);
-                $model->influence = intval($reader->getValue(XlsReader::INFLUENCE_ROW, $col));
+                $model->bala = intval($reader->getValue(XlsReader::BALA_ROW, $col));
 
                 $storage->add($model);
             }
