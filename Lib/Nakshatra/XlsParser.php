@@ -90,7 +90,7 @@ class XlsParser
                 $model->source = $userNakshatraName;
                 $model->target = $currentNakshatraName;
 //                $model->nadi = $reader->getNextCellValue($cell);
-                $model->tara = $reader->getValue($row, XlsReader::TARA_COL);
+                $model->tara = str_replace('\"', '', $reader->getValue($row, XlsReader::TARA_COL));
                 $model->bala = intval($reader->getValue(XlsReader::BALA_ROW, $col));
 
                 $storage->add($model);
