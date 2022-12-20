@@ -37,4 +37,12 @@ class Model
             $this->bala,
         ];
     }
+
+//    public function stripQuotes()
+//    {
+//        foreach (get_object_vars($this) as $attr => $value) {
+//            $this->$attr = str_replace(['"', '"'], [''. ''], $value);
+//        }
+//        return $this;
+//    }
 }

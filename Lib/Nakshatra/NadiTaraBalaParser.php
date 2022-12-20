@@ -2,7 +2,7 @@
 
 namespace Lib\Nakshatra;
 
-class XlsParser
+class NadiTaraBalaParser
 {
 //    const NAMES = [
 //        'Ашвини',
@@ -65,7 +65,7 @@ class XlsParser
 
     public function saveToStorage($filename = null): void
     {
-        $reader = new XlsReader($filename);
+        $reader = new NadiTaraBalaReader($filename);
 
         $storage = new Storage();
         $storage->reset();
@@ -90,8 +90,8 @@ class XlsParser
                 $model->source = $userNakshatraName;
                 $model->target = $currentNakshatraName;
 //                $model->nadi = $reader->getNextCellValue($cell);
-                $model->tara = str_replace('\"', '', $reader->getValue($row, XlsReader::TARA_COL));
-                $model->bala = intval($reader->getValue(XlsReader::BALA_ROW, $col));
+                $model->tara = $reader->getValue($row, NadiTaraBalaReader::TARA_COL);
+                $model->bala = intval($reader->getValue(NadiTaraBalaReader::BALA_ROW, $col));
 
                 $storage->add($model);
             }

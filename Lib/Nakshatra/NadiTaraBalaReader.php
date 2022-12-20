@@ -4,7 +4,7 @@ namespace Lib\Nakshatra;
 
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class XlsReader
+class NadiTaraBalaReader
 {
     const FILENAME = __DIR__ . '/../../nadi.xlsx';
 

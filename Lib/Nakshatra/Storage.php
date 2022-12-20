@@ -12,7 +12,9 @@ class Storage
     public function __construct()
     {
         if ($handle = @fopen(self::FILENAME, 'r')) {
-            $this->raw = fgetcsv($handle);
+            while ($data = fgetcsv($handle)) {
+                $this->raw[] = $data;
+            }
             fclose($handle);
         }
 
@@ -46,5 +48,10 @@ class Storage
     {
         $this->raw = [];
         $this->indexed = [];
+    }
+
+    public function getSection($name)
+    {
+        return $this->indexed[$name];
     }
 }

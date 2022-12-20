@@ -2,10 +2,19 @@
 
 namespace Lib;
 
+use Lib\Nakshatra\Model;
+use Lib\Nakshatra\Storage;
+
 class Dictionary
 {
     public $dict = [];
     public $content;
+    public $nakshatraStorage;
+
+    public function loadNakshatraDict($userNakshatraName)
+    {
+        $this->nakshatraStorage = (new Storage())->getSection($userNakshatraName);
+    }
 
     public function useDict($filename)
     {
@@ -45,6 +54,15 @@ class Dictionary
     {
         if (str_contains($content, $needle)) {
             $content .= '\n' . $phraseToAdd;
+        }
+        return $content;
+    }
+
+    public function addNakshatraDescription($content)
+    {
+        $currentNakshatraName = Nakshatra\Parser::retrieveNakshatra($content);
+        if ($nakshatraModel = $this->nakshatraStorage[$currentNakshatraName] ?? null) {
+            $content .= '\n' . "$currentNakshatraName $nakshatraModel->tara $nakshatraModel->bala%";
         }
         return $content;
     }
