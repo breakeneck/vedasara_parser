@@ -7,6 +7,8 @@ use ICal\ICal;
 
 class Calendar
 {
+    const FIELD_DESCRIPTION = 'description';
+    const FIELD_SUMMARY = 'summary';
     /** @var ICal  */
     private $ical;
     private $events;
@@ -39,17 +41,17 @@ class Calendar
 //    }
 
 
-    public function updateEvent()
+    public function updateDescription()
     {
         $this->events[0]->description = 'Hello World';
         return $this;
 
     }
 
-    public function updateEvents($callback, $arguments = [])
+    public function updateFields($field, $callback, $arguments = [])
     {
         foreach ($this->events as $i => $event) {
-            $this->events[$i]->description = call_user_func_array($callback, array_merge([$event->description], $arguments));
+            $this->events[$i]->$field = call_user_func_array($callback, array_merge([$event->$field], $arguments));
         }
 //        $this->events[0]->description = 'Hello World';
         return $this;

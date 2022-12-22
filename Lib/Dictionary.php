@@ -3,6 +3,7 @@
 namespace Lib;
 
 use Lib\Nakshatra\Model;
+use Lib\Nakshatra\Parser;
 use Lib\Nakshatra\Storage;
 
 class Dictionary
@@ -62,7 +63,8 @@ class Dictionary
     {
         list($currentNakshatraName, $time) = Nakshatra\Parser::retrieveNakshatra($content);
         if ($nakshatraModel = $this->nakshatraStorage[$currentNakshatraName] ?? null) {
-            $content .= '\n' . "$currentNakshatraName $nakshatraModel->tara $nakshatraModel->bala% до $time";
+//            $content .= '\n' . "$currentNakshatraName $nakshatraModel->tara $nakshatraModel->bala% до $time";
+            $content = Parser::replaceNakshatra($content, "$nakshatraModel->tara $nakshatraModel->bala%");
         }
         return $content;
     }
