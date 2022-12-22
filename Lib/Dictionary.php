@@ -60,9 +60,9 @@ class Dictionary
 
     public function addNakshatraDescription($content)
     {
-        $currentNakshatraName = Nakshatra\Parser::retrieveNakshatra($content);
+        list($currentNakshatraName, $time) = Nakshatra\Parser::retrieveNakshatra($content);
         if ($nakshatraModel = $this->nakshatraStorage[$currentNakshatraName] ?? null) {
-            $content .= '\n' . "$currentNakshatraName $nakshatraModel->tara $nakshatraModel->bala%";
+            $content .= '\n' . "$currentNakshatraName $nakshatraModel->tara $nakshatraModel->bala% до $time";
         }
         return $content;
     }

@@ -22,7 +22,7 @@ $dictionary->loadNakshatraDict($userNakshatraName);
 $calendar->updateEvents([$dictionary, 'addNakshatraDescription']);
 
 
-$calendar->write(__DIR__ .'/new.ical');
+$calendar->write(__DIR__ ."/$userNakshatraName-" . date('Y'). ".ical");
 
 
 
