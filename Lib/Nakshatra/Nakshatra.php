@@ -2,7 +2,7 @@
 
 namespace Lib\Nakshatra;
 
-class Model
+class Nakshatra
 {
     const SOURCE = 0;
     const TARGET = 1;

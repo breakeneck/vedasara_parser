@@ -86,14 +86,14 @@ class NadiTaraBalaParser
 
                 list($row, $col) = [$cell->getRow(), $cell->getColumn()];
 
-                $model = new Model();
+                $model = new Nakshatra();
                 $model->source = $userNakshatraName;
                 $model->target = $currentNakshatraName;
 //                $model->nadi = $reader->getNextCellValue($cell);
                 $model->tara = $reader->getValue($row, NadiTaraBalaReader::TARA_COL);
                 $model->bala = intval($reader->getValue(NadiTaraBalaReader::BALA_ROW, $col));
 
-                $storage->add($model);
+                $storage->add($model->toArray());
             }
         }
 

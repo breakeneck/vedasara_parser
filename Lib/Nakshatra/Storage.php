@@ -4,14 +4,18 @@ namespace Lib\Nakshatra;
 
 class Storage
 {
-    const FILENAME = __DIR__ . '/../../nadi.csv';
+    const INDEX_LEVEL_1 = 1;
+    const INDEX_LEVEL_2 = 2;
 
     protected $raw = [];
     protected $indexed = [];
 
-    public function __construct()
+    protected $indexLevel;
+
+    public function __construct($filename, $indexBy)
     {
-        if ($handle = @fopen(self::FILENAME, 'r')) {
+        $this->indexLevel = $indexBy;
+        if ($handle = @fopen($filename, 'r')) {
             while ($data = fgetcsv($handle)) {
                 $this->raw[] = $data;
             }
@@ -25,8 +29,13 @@ class Storage
     {
         $this->indexed = [];
         foreach ($this->raw as $values) {
-            $nakshatra = new Model($values);
-            $this->indexed[$nakshatra->source][$nakshatra->target] = $nakshatra;
+//            $nakshatra = new Model($values);
+            if ($this->indexLevel == self::INDEX_LEVEL_2) {
+                $this->indexed[$values[0]][$values[1]] = $values;
+            }
+            else {
+                $this->indexed[$values[0]] = $values;
+            }
         }
     }
 
@@ -39,9 +48,9 @@ class Storage
         fclose($handle);
     }
 
-    public function add(Model $nakshatra)
+    public function add($values)
     {
-        return $this->raw[] = $nakshatra->toArray();
+        return $this->raw[] = $values;
     }
 
     public function reset()

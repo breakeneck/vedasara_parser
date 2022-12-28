@@ -3,10 +3,11 @@
 use Lib\Calendar;
 
 const REPLACE_DICT = __DIR__ . '/dict_replace.txt';
-const ADD_CONTENT_DICT = __DIR__ . '/dict_add.txt';
-//print_r($argv);
+const MOON_POWER = __DIR__ . '/moonpower.csv';
+const NADI = __DIR__ . '/nadi.csv';
+
 require 'vendor/autoload.php';
-list($script, $filename, $userNakshatraName) = $argv;
+list($script, $filename, $userNakshatraName, $moonPlace) = $argv;
 
 $dictionary = new \Lib\Dictionary();
 
@@ -17,14 +18,11 @@ $dictionary->useDict(REPLACE_DICT);
 $calendar->updateFields(Calendar::FIELD_SUMMARY, [$dictionary, 'replaceContent']);
 $calendar->updateFields(Calendar::FIELD_DESCRIPTION, [$dictionary, 'replaceContent']);
 
-//$dictionary->useDict(ADD_CONTENT_DICT);
-//foreach ($dictionary->dict as $item) {
-//    list($needle, $newPhrase) = [$item['from'], $item['to']];
-//    $calendar->updateEvents([$dictionary, 'addPhraseIfFound'], [$newPhrase, $needle]);
-//}
-$dictionary->loadNakshatraDict($userNakshatraName);
+$dictionary->loadNakshatraDict(NADI, $userNakshatraName);
 $calendar->updateFields(Calendar::FIELD_DESCRIPTION, [$dictionary, 'addNakshatraDescription']);
 
+$dictionary->loadMoonPower(MOON_POWER, $moonPlace);
+$calendar->updateFields(Calendar::FIELD_DESCRIPTION, [$dictionary, 'addMoonOpportuneness']);
 
 $calendar->write(__DIR__ ."/$userNakshatraName-" . date('Y'). ".ical");
 

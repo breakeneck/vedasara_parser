@@ -40,14 +40,6 @@ class Calendar
 //        return $result;
 //    }
 
-
-    public function updateDescription()
-    {
-        $this->events[0]->description = 'Hello World';
-        return $this;
-
-    }
-
     public function updateFields($field, $callback, $arguments = [])
     {
         foreach ($this->events as $i => $event) {

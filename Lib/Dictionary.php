@@ -2,7 +2,8 @@
 
 namespace Lib;
 
-use Lib\Nakshatra\Model;
+use Lib\Nakshatra\MoonPlace;
+use Lib\Nakshatra\Nakshatra;
 use Lib\Nakshatra\Parser;
 use Lib\Nakshatra\Storage;
 
@@ -11,10 +12,11 @@ class Dictionary
     public $dict = [];
     public $content;
     public $nakshatraStorage;
+    public $moonPowerStorage = [];
 
-    public function loadNakshatraDict($userNakshatraName)
+    public function loadNakshatraDict($filename, $userNakshatraName)
     {
-        $this->nakshatraStorage = (new Storage())->getSection($userNakshatraName);
+        $this->nakshatraStorage = (new Storage($filename, Storage::INDEX_LEVEL_2))->getSection($userNakshatraName);
     }
 
     public function useDict($filename)
@@ -61,10 +63,26 @@ class Dictionary
 
     public function addNakshatraDescription($content)
     {
-        list($currentNakshatraName, $time) = Nakshatra\Parser::retrieveNakshatra($content);
-        if ($nakshatraModel = $this->nakshatraStorage[$currentNakshatraName] ?? null) {
+        list($currentNakshatraName, $time) = Parser::retrieveNakshatra($content);
+        $nakshatraModel = new Nakshatra($this->nakshatraStorage[$currentNakshatraName] ?? []);
+        if ($nakshatraModel->source) {
 //            $content .= '\n' . "$currentNakshatraName $nakshatraModel->tara $nakshatraModel->bala% до $time";
             $content = Parser::replaceNakshatra($content, "$currentNakshatraName, $nakshatraModel->tara $nakshatraModel->bala%");
+        }
+        return $content;
+    }
+
+    public function loadMoonPower($filename, $moonPlace)
+    {
+        $this->moonPowerStorage = (new Storage($filename, Storage::INDEX_LEVEL_1))->getSection($moonPlace);
+    }
+
+    public function addMoonOpportuneness($content)
+    {
+        $currentMoonPlace = Parser::retrieveMoonPlace($content);
+        $moonPlaceModel = new MoonPlace($this->moonPowerStorage[$currentMoonPlace] ?? null);
+        if ($moonPlaceModel->userPlace) {
+            $content = Parser::addMoonTransitFavour($content, $moonPlaceModel->hasUnfavorableTransit($currentMoonPlace) ? 'несприятливо' : 'сприятливо');
         }
         return $content;
     }
